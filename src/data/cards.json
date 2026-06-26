@@ -1,0 +1,364 @@
+{
+  "_README": "PRP Aviation SR20 study-card content. EDIT THIS FILE, then run: python3 make_cards.py  (needs python3 with reportlab + pillow). Each card needs eyebrow, title, subtitle, and steps. A step is either a plain string (a main bullet) OR an object {\"text\": \"...\", \"substeps\": [\"...\", \"...\"]} for a bullet with indented sub-items. Add \"columns\": 2 to a card for a two-column back (auto-balanced). Fonts auto-shrink to fit, so you don't need to worry about length. To add a card, copy any block in \"cards\" and edit it. Reorder cards by reordering the list. Colors and cover text live in \"theme\" and \"deck\". Avoid the -> arrow character; use words instead.",
+
+  "deck": {
+    "cover_title": "SR20 CIRRUS",
+    "cover_subtitle": "QUESTION MARK FLOW  ·  STUDY CARDS",
+    "cover_tagline": "Personal  ·  Reliable  ·  Professional",
+    "index_eyebrow": "Deck Index",
+    "index_title": "What's in the deck",
+    "footer_left": "SR20 CIRRUS",
+    "footer_center": "QUESTION MARK FLOWS",
+    "logo_file": "PRP_Aviation_Logo_transparent.png",
+    "output_file": "PRP_SR20_StudyCards.pdf",
+    "card_size_inches": [6, 4],
+    "include_cover": true
+  },
+
+  "theme": {
+    "card_bg": "#0E0F12",
+    "copper": "#C0824E",
+    "copper_light": "#DDA877",
+    "copper_dark": "#8A5A33",
+    "steel": "#C9CCD0",
+    "steel_light": "#ECEEF0",
+    "steel_dark": "#80858B",
+    "text": "#E2E3E6",
+    "text_dim": "#A9ADB2",
+    "watermark": "#15171B"
+  },
+
+  "cards": [
+    {
+      "eyebrow": "Core Concept",
+      "title": "The Question Mark Flow",
+      "subtitle": "A counterclockwise “upside-down ?” path",
+      "steps": [
+        "Start at the THROTTLE",
+        "Down to the BOOST PUMP",
+        "Aft to the FUEL SELECTOR",
+        "Up to the MIXTURE",
+        "Over to the FLAPS switch",
+        "Up the FMS stack to the MFD"
+      ]
+    },
+    {
+      "eyebrow": "Preflight",
+      "title": "Pre-Flight",
+      "subtitle": "Walkaround, then verify on paper",
+      "steps": [
+        "Start outside, in front of the wing / under the door",
+        "Begin the standard walkaround flow",
+        "On completion, use the PAPER checklist to verify ALL items complete"
+      ]
+    },
+    {
+      "eyebrow": "Before Start",
+      "title": "Before Engine Start",
+      "subtitle": "Cockpit setup",
+      "steps": [
+        "Select profile / database verification",
+        "Fuel quantity — totalizer vs. gauges",
+        "W&B — enter pre-calculated values, confirm in envelope",
+        "Safety briefing",
+        "Remove CAPS pin, then place on dash",
+        "Keys in ignition",
+        "Personal minimums"
+      ]
+    },
+    {
+      "eyebrow": "Engine Start",
+      "title": "Engine Start",
+      "subtitle": "Cold <100°F oil  ·  Hot >100°F oil",
+      "steps": [
+        "MFD checklist up to strobe lights",
+        "Switch to the PRP Aviation card",
+        "Cold start <100°F oil temp · Hot >100°F",
+        "L-hand: crank through the false start until it lights",
+        "On start — R-hand throttle ~1000 RPM, then up to AC",
+        "L-hand off key · ALT 1 & 2 ON · Avionics ON (1·2·3)",
+        {
+          "text": "R-hand “?” flow:",
+          "substeps": [
+            "Throttle 1000 RPM",
+            "Boost OFF",
+            "Switch tanks",
+            "Mixture on “X”",
+            "Flaps up & verify",
+            "Oil pressure"
+          ]
+        }
+      ]
+    },
+    {
+      "eyebrow": "After Start",
+      "title": "After Start Flow",
+      "subtitle": "Left to right:  1 · 2 · 3 · 4 · 5",
+      "steps": [
+        "ALT 1",
+        "ALT 2",
+        "Avionics ON",
+        "AC ON",
+        {
+          "text": "After-start “?” flow:",
+          "substeps": [
+            "Boost OFF",
+            "Switch tanks",
+            "Throttle 1000 RPM",
+            "Mixture on “X”",
+            "Flaps up",
+            "Brakes",
+            "Oil pressure"
+          ]
+        }
+      ]
+    },
+    {
+      "eyebrow": "Before Taxi",
+      "title": "Before Taxi",
+      "subtitle": "ATIS · clearance · FPL setup",
+      "steps": [
+        "MFD checklist, beginning with flaps up",
+        "Obtain ATIS / clearance / FPL setup",
+        {
+          "text": "FPL as a memory aid — 3 things to do:",
+          "substeps": [
+            "Flight plan & frequencies",
+            "Altimeter & departure-altitude preselect",
+            "Heading for the departure runway"
+          ]
+        },
+        "Map to Safe Taxi"
+      ]
+    },
+    {
+      "eyebrow": "Taxi",
+      "title": "Taxiing",
+      "subtitle": "Brief it before you roll",
+      "steps": [
+        "Brief the MFD BEFORE moving — don't be heads-down",
+        {
+          "text": "IFR checks while taxiing:",
+          "substeps": [
+            "HSI",
+            "Attitude indicator",
+            "Turn coordinator"
+          ]
+        }
+      ]
+    },
+    {
+      "eyebrow": "Runup · Part 1",
+      "title": "Before Takeoff / Runup",
+      "subtitle": "Controls & trim",
+      "steps": [
+        "Confirm nosewheel straight",
+        "Follow the MFD checklist",
+        "Verify flaps 50%",
+        "Ailerons full deflection — confirm they match flaps",
+        "Autopilot ON — confirm you can overpower it",
+        "Trim the airplane for takeoff",
+        "Hold A/P disconnect — elevator trim must NOT engage"
+      ]
+    },
+    {
+      "eyebrow": "Runup · Part 2",
+      "title": "Before Takeoff / Runup",
+      "subtitle": "Power & magneto check",
+      "steps": [
+        "Mixture full rich, then flow",
+        "Throttle 2200 RPM",
+        "Engine page — all electrical items ON",
+        "Check voltage & amperage",
+        "Mag check: 2L · 2R · 1L · 1R",
+        "Limits: max 175 RPM drop each · max 50 diff L/R",
+        "Engine parameters page check",
+        "Idle check",
+        "Electrical OFF (except strobes), back to MFD"
+      ]
+    },
+    {
+      "eyebrow": "Ready to Depart",
+      "title": "Ready to Depart",
+      "subtitle": "Final check before calling ready",
+      "steps": [
+        "Fuel",
+        "Flaps",
+        "CAPS",
+        "Maps"
+      ]
+    },
+    {
+      "eyebrow": "Takeoff",
+      "title": "Normal Takeoff",
+      "subtitle": "68, rotate by 71  ·  85  ·  96  ·  105",
+      "steps": [
+        "Verify: Fuel · Flaps · CAPS · Maps",
+        "Throttle full power over ~3 seconds",
+        "Look for 68 KIAS; rotate by 71",
+        "Set the 85 KIAS sight picture",
+        "Flaps up",
+        "Set 96 KIAS to 1000 AGL",
+        "Out of pattern — set 105 KIAS cruise climb"
+      ]
+    },
+    {
+      "eyebrow": "Reference · V-Speeds",
+      "title": "Takeoff & Climb",
+      "subtitle": "SR20 POH · KIAS · max 3150 lb",
+      "steps": [
+        { "text": "Takeoff (flaps 50%):", "substeps": [
+          "Normal: 71–75",
+          "Short field: 71",
+          "Obstacle clearance: 81"
+        ]},
+        { "text": "Enroute climb (flaps up):", "substeps": [
+          "Normal, SL: 96",
+          "Normal, 10,000': 92",
+          "Best rate, SL: 96",
+          "Best rate, 10,000': 92"
+        ]}
+      ]
+    },
+    {
+      "eyebrow": "Reference · V-Speeds",
+      "title": "Approach & Limits",
+      "subtitle": "SR20 POH · KIAS · max 3150 lb",
+      "columns": 2,
+      "steps": [
+        { "text": "Landing approach:", "substeps": [
+          "Flaps up: 89",
+          "Flaps 50%: 84",
+          "Flaps 100%: 78",
+          "Short field (100%): 78"
+        ]},
+        { "text": "Go-around (flaps 50%):", "substeps": [
+          "Full power: 81"
+        ]},
+        { "text": "Turbulent air penetration:", "substeps": [
+          "3150 lb: 133",
+          "2700 lb: 123",
+          "2300 lb: 114"
+        ]},
+        { "text": "Max demo crosswind:", "substeps": [
+          "Takeoff or landing: 20 kt"
+        ]}
+      ]
+    },
+    {
+      "eyebrow": "Climb",
+      "title": "After Takeoff / Climb",
+      "subtitle": "Full-power flow",
+      "steps": [
+        "Throttle full power",
+        "Fuel pump ON",
+        "Mixture full rich",
+        "Verify flaps up",
+        "Check engine parameters"
+      ]
+    },
+    {
+      "eyebrow": "Cruise",
+      "title": "Cruise",
+      "subtitle": "65–75%  ·  lean assist",
+      "steps": [
+        "Throttle 65–75%",
+        "Fuel pump OFF",
+        "Verify fullest tank",
+        "Mixture to cyan / lean assist"
+      ]
+    },
+    {
+      "eyebrow": "Descent",
+      "title": "Descent",
+      "subtitle": "Start 25 minutes prior",
+      "steps": [
+        "Begin 25 minutes prior to arrival",
+        "Follow the MFD electronic checklist",
+        "Mixture — may delay until 50% flaps"
+      ]
+    },
+    {
+      "eyebrow": "Before Landing",
+      "title": "Before Landing",
+      "subtitle": "Boost on · mixture rich",
+      "steps": [
+        "Throttle as required (50% downwind · 25% abeam touchdown)",
+        "Boost pump ON",
+        "Mixture full rich at 50% flaps"
+      ]
+    },
+    {
+      "eyebrow": "After Landing",
+      "title": "After Landing",
+      "subtitle": "Clean up for taxi",
+      "steps": [
+        "Throttle as required",
+        "Boost pump OFF",
+        "Select fullest tank",
+        "Mixture on “X” for taxi",
+        "Flaps up",
+        "Maps — zoom for safe taxi"
+      ]
+    },
+    {
+      "eyebrow": "Shutdown",
+      "title": "Shutdown",
+      "subtitle": "“?” flow, then switches off",
+      "steps": [
+        "AC OFF / fan to 0",
+        "CAPS pin back in",
+        "P-lead check — OFF, then back to BOTH",
+        "Mixture cutoff",
+        "Finger to dash — wait for the prop to stop",
+        "Switches OFF right-to-left: Avionics · ALT 2 · ALT 1 · BAT 1 · BAT 2"
+      ]
+    },
+    {
+      "eyebrow": "Secure",
+      "title": "Secure the Plane",
+      "subtitle": "Belts in the seats",
+      "steps": [
+        "Seatbelts secured in the seats",
+        "Keeps belts from closing in the door"
+      ]
+    },
+    {
+      "eyebrow": "Briefing",
+      "title": "Takeoff Briefing",
+      "subtitle": "Brief before every departure",
+      "columns": 2,
+      "steps": [
+        {
+          "text": "Type:",
+          "substeps": [
+            "Normal / short-field / soft-field technique"
+          ]
+        },
+        {
+          "text": "Performance:",
+          "substeps": [
+            "TO distance for weight, conditions & DA (POH or EFB)",
+            "Available runway + adequate safety margin"
+          ]
+        },
+        {
+          "text": "Departure plan:",
+          "substeps": [
+            "Turn-out & routing"
+          ]
+        },
+        {
+          "text": "Abnormal / emergency plan:",
+          "substeps": [
+            "Determine MSL for 600 AGL & 2000 AGL",
+            "Before rotation",
+            "After rotation, below 600 AGL",
+            "Above 600, below 2000 AGL",
+            "Above 2000 AGL"
+          ]
+        }
+      ]
+    }
+  ]
+}
