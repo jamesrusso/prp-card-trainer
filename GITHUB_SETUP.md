@@ -42,7 +42,7 @@ git push -u origin main
 2. **Import** the `prp-sr20-trainer` repo. Vercel auto-detects **Vite** (build `npm run build`, output `dist`) — leave defaults.
 3. Expand **Environment Variables** and add:
    - `VITE_SUPABASE_URL` = your Supabase Project URL
-   - `VITE_SUPABASE_ANON_KEY` = your Supabase anon public key
+   - `VITE_SUPABASE_PUBLISHABLE_KEY` = your Supabase publishable key (`sb_publishable_…`)
 4. **Deploy.** Copy the live URL (e.g. `https://prp-sr20-trainer.vercel.app`).
 
 *(Netlify/Cloudflare Pages work the same way: import repo → add the two env vars → deploy.)*
@@ -63,4 +63,4 @@ Make sure you've already run `supabase_setup.sql` + `seed_cards.sql` and locked 
 - **Changing the app code:** `git push` → Vercel rebuilds and redeploys automatically. (No GitHub Actions needed.)
 
 ### Optional convenience
-On Vercel you can add the **Supabase integration** (Project → Integrations), which can inject the `VITE_SUPABASE_URL`/`VITE_SUPABASE_ANON_KEY` for you instead of pasting them in step 2.
+On Vercel you can add the **Supabase integration** (Project → Integrations), which can inject the `VITE_SUPABASE_URL`/`VITE_SUPABASE_PUBLISHABLE_KEY` for you instead of pasting them in step 2.

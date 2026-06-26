@@ -25,7 +25,7 @@ export default function Editor({ session }) {
   }, [session]);
 
   if (!hasSupabase)
-    return <Note>Set <code>VITE_SUPABASE_URL</code> and <code>VITE_SUPABASE_ANON_KEY</code> (see README), then reload to edit online.</Note>;
+    return <Note>Set <code>VITE_SUPABASE_URL</code> and <code>VITE_SUPABASE_PUBLISHABLE_KEY</code> (see README), then reload to edit online.</Note>;
 
   if (!session) {
     return (
