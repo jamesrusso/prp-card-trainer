@@ -18,7 +18,7 @@ A public quiz over the SR20 "question-mark" flows, plus a magic-link-protected e
 npm install
 cp .env.example .env
 ```
-Edit `.env` with your **Project URL** and **publishable** key (Supabase → Project Settings → API Keys).
+Edit `.env` with your **Project URL** and **publishable key** (Supabase → Project Settings → **API Keys** → "Publishable key", `sb_publishable_…`). On older projects the legacy "anon" key also works — set `VITE_SUPABASE_ANON_KEY` instead.
 
 ## 3. Run locally
 ```bash
@@ -33,7 +33,7 @@ Open the printed URL (usually http://localhost:5173).
 ## 4. Deploy (auto-publish on every push)
 1. Push this folder to a **GitHub** repo.
 2. On **Vercel** (or Netlify/Cloudflare Pages): **New Project → import the repo**. Framework preset auto-detects **Vite** (build `npm run build`, output `dist`).
-3. Add the two environment variables (`VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`) in the host's project settings.
+3. Add the two environment variables (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`) in the host's project settings.
 4. Deploy. Add your deployed URL to Supabase **Redirect URLs** (step 3 note).
 
 From then on: editors sign in on the live site, edit, **Save to cloud**, and every viewer sees the new deck immediately — no rebuilding or re-uploading.

@@ -1,6 +1,6 @@
 /* Supabase data + auth helpers. */
 import { supabase } from "../supabaseClient.js";
-import { rowToCard, cardToRow } from "./cards.js";
+import { rowToCard, cardToRow, cleanSteps } from "./cards.js";
 import fallback from "../data/cards.json";
 
 /** Public read of the deck (ordered). Falls back to the bundled deck if Supabase isn't configured. */
@@ -34,6 +34,23 @@ export async function isEditor() {
   const { data, error } = await supabase.rpc("is_editor");
   if (error) return false;
   return !!data;
+}
+
+/** Update one existing card's content (not its position). Used by the in-quiz quick edit. */
+export async function saveCard(card) {
+  if (!supabase) throw new Error("Supabase not configured");
+  if (!card.id || String(card.id).startsWith("local-"))
+    throw new Error("This card isn't in the cloud yet — add it from the Editor first.");
+  const row = {
+    eyebrow: (card.eyebrow || "").trim(),
+    title: (card.title || "").trim(),
+    subtitle: (card.subtitle || "").trim(),
+    two_col: !!card.columns,
+    steps: cleanSteps(card.steps),
+  };
+  const { error } = await supabase.from("cards").update(row).eq("id", card.id);
+  if (error) throw error;
+  return rowToCard({ id: card.id, ...row });
 }
 
 /** Persist the full deck: update existing rows, insert new ones, delete removed ones, renumber positions. */

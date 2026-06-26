@@ -22,7 +22,7 @@ export default function App() {
       {!hasSupabase && view === "quiz" && (
         <div className="note">Running on the bundled deck. Add your Supabase keys (see README) to go live and enable editing.</div>
       )}
-      {view === "quiz" ? <Quiz /> : <Editor session={session} />}
+      {view === "quiz" ? <Quiz session={session} /> : <Editor session={session} />}
       <footer className="ft">PRP Aviation · Personal · Reliable · Professional</footer>
     </div>
   );

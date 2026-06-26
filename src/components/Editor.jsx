@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchCards, isEditor, sendMagicLink, saveDeck } from "../lib/api.js";
 import { hasSupabase } from "../supabaseClient.js";
+import { CardBody, mv } from "./CardEditor.jsx";
 
 let _k = 0;
 const key = () => "k" + (++_k);
@@ -50,8 +51,6 @@ export default function Editor({ session }) {
   // ---- editing helpers (immutable) ----
   const setCard = (ci, fn) => setDeck((d) => d.map((c, i) => (i === ci ? fn({ ...c }) : c)));
   const setField = (ci, f, v) => setCard(ci, (c) => ({ ...c, [f]: v }));
-  const setSteps = (ci, fn) => setCard(ci, (c) => ({ ...c, steps: fn((c.steps || []).slice()) }));
-  const mv = (arr, i, dir) => { const j = i + dir; if (j < 0 || j >= arr.length) return arr; const a = arr.slice(); [a[i], a[j]] = [a[j], a[i]]; return a; };
 
   const addCard = () => setDeck((d) => [...d, { _k: key(), eyebrow: "New", title: "New Card", subtitle: "", steps: [""], _open: true }]);
   const delCard = (ci) => { const c = deck[ci]; if (!confirm(`Delete “${c.title || "card"}”?`)) return; if (c.id) setRemoved((r) => [...r, c.id]); setDeck((d) => d.filter((_, i) => i !== ci)); };
@@ -92,63 +91,10 @@ export default function Editor({ session }) {
             <button className="iconbtn danger" onClick={() => delCard(ci)}>🗑</button>
             <button className="iconbtn" onClick={() => setField(ci, "_open", !c._open)}>{c._open ? "▲" : "▼"}</button>
           </div>
-          {c._open && (
-            <div className="cardp-b">
-              <div className="row2">
-                <div><span className="lbl">Eyebrow</span><input className="f" value={c.eyebrow || ""} onChange={(e) => setField(ci, "eyebrow", e.target.value)} /></div>
-                <div><span className="lbl">Title</span><input className="f" value={c.title || ""} onChange={(e) => setField(ci, "title", e.target.value)} /></div>
-              </div>
-              <div><span className="lbl">Subtitle</span><input className="f" value={c.subtitle || ""} onChange={(e) => setField(ci, "subtitle", e.target.value)} /></div>
-              <label className="chk"><input type="checkbox" checked={!!c.columns} onChange={(e) => setField(ci, "columns", e.target.checked)} /> Two-column back</label>
-              <div className="steps-h">Steps</div>
-              {(c.steps || []).map((st, si) => <StepRow key={si} st={st} ci={ci} si={si} setSteps={setSteps} mv={mv} />)}
-              <div className="addrow"><button className="btn sm" onClick={() => setSteps(ci, (s) => [...s, ""])}>＋ Add step</button></div>
-            </div>
-          )}
+          {c._open && <CardBody card={c} onChange={(fn) => setCard(ci, fn)} />}
         </div>
       ))}
       <div className="addrow" style={{ marginTop: 8 }}><button className="btn sm" onClick={addCard}>+ Add card</button></div>
-    </div>
-  );
-}
-
-function StepRow({ st, ci, si, setSteps, mv }) {
-  const isStr = typeof st === "string";
-  const up = (fn) => setSteps(ci, (s) => { s[si] = fn(s[si]); return s; });
-  const del = () => setSteps(ci, (s) => s.filter((_, i) => i !== si));
-  const move = (dir) => setSteps(ci, (s) => mv(s, si, dir));
-  if (isStr) return (
-    <div className="step"><div className="step-main">
-      <button className="iconbtn mini" onClick={() => move(-1)}>↑</button>
-      <button className="iconbtn mini" onClick={() => move(1)}>↓</button>
-      <input className="f grow" value={st} placeholder="Step text" onChange={(e) => up(() => e.target.value)} />
-      <button className="iconbtn mini" title="Add sub-steps" onClick={() => up((v) => ({ text: String(v || ""), substeps: [""] }))}>＋ sub</button>
-      <button className="iconbtn mini danger" onClick={del}>🗑</button>
-    </div></div>
-  );
-  const setSub = (sj, v) => up((g) => ({ ...g, substeps: g.substeps.map((x, i) => (i === sj ? v : x)) }));
-  const addSub = () => up((g) => ({ ...g, substeps: [...g.substeps, ""] }));
-  const delSub = (sj) => up((g) => { const subs = g.substeps.filter((_, i) => i !== sj); return subs.length ? { ...g, substeps: subs } : (g.text || ""); });
-  const moveSub = (sj, dir) => up((g) => ({ ...g, substeps: mv(g.substeps, sj, dir) }));
-  return (
-    <div className="step group"><div className="step-main">
-      <button className="iconbtn mini" onClick={() => move(-1)}>↑</button>
-      <button className="iconbtn mini" onClick={() => move(1)}>↓</button>
-      <input className="f grow" value={st.text} placeholder="Heading (e.g. “IFR checks:”)" onChange={(e) => up((g) => ({ ...g, text: e.target.value }))} />
-      <button className="iconbtn mini" title="Remove sub-steps" onClick={() => up((g) => g.text || "")}>－ sub</button>
-      <button className="iconbtn mini danger" onClick={del}>🗑</button>
-    </div>
-      <div className="subs">
-        {st.substeps.map((x, sj) => (
-          <div className="sub" key={sj}>
-            <button className="iconbtn mini" onClick={() => moveSub(sj, -1)}>↑</button>
-            <button className="iconbtn mini" onClick={() => moveSub(sj, 1)}>↓</button>
-            <input className="f grow" value={x} placeholder="Sub-step" onChange={(e) => setSub(sj, e.target.value)} />
-            <button className="iconbtn mini danger" onClick={() => delSub(sj)}>🗑</button>
-          </div>
-        ))}
-        <div className="addrow"><button className="btn sm" onClick={addSub}>＋ add sub-step</button></div>
-      </div>
     </div>
   );
 }

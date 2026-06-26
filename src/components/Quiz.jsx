@@ -1,15 +1,22 @@
 import { useEffect, useState } from "react";
-import { fetchCards } from "../lib/api.js";
+import { fetchCards, isEditor, saveCard } from "../lib/api.js";
 import { shuffle, buildMC, buildOrder, isPureSeq, flatten, norm } from "../lib/quizLogic.js";
+import { CardBody } from "./CardEditor.jsx";
 
 const BLANK = {
   screen: "loading", mode: null, mcCount: 12, scope: "all",
   cards: [], queue: [], idx: 0, correct: 0, done: 0, answered: false, pick: null, missed: [], order: null,
 };
 
-export default function Quiz() {
+export default function Quiz({ session }) {
   const [s, setS] = useState(BLANK);
   const up = (patch) => setS((p) => ({ ...p, ...patch }));
+
+  // In-quiz quick edit (flashcards only, editors only).
+  const [canEdit, setCanEdit] = useState(false);
+  const [editing, setEditing] = useState(null); // working copy of the card, or null
+  const [saving, setSaving] = useState(false);
+  const [editMsg, setEditMsg] = useState("");
 
   useEffect(() => {
     let on = true;
@@ -18,6 +25,27 @@ export default function Quiz() {
       .catch(() => on && setS((st) => ({ ...st, screen: "home" })));
     return () => { on = false; };
   }, []);
+
+  useEffect(() => {
+    if (!session) { setCanEdit(false); return; }
+    let on = true;
+    isEditor().then((ok) => on && setCanEdit(ok));
+    return () => { on = false; };
+  }, [session]);
+
+  // Close any open edit when the card or screen changes.
+  useEffect(() => { setEditing(null); setEditMsg(""); }, [s.idx, s.screen]);
+
+  async function saveEdit() {
+    setSaving(true); setEditMsg("");
+    try {
+      const saved = await saveCard(editing);
+      const repl = (arr) => arr.map((c) => (c.id === saved.id ? { ...saved } : c));
+      setS((st) => ({ ...st, cards: repl(st.cards), queue: repl(st.queue) }));
+      setEditing(null);
+    } catch (e) { setEditMsg("Save failed: " + (e.message || e)); }
+    setSaving(false);
+  }
 
   const scoped = () => (s.scope === "flows" ? s.cards.filter(isPureSeq) : s.cards);
 
@@ -84,6 +112,7 @@ export default function Quiz() {
   // keyboard
   useEffect(() => {
     const h = (e) => {
+      if (editing) return; // don't grade while typing in the inline editor
       if (s.screen === "flash") {
         if (e.code === "Space") { e.preventDefault(); if (!s.answered) up({ answered: true }); }
         else if (s.answered && (e.key === "1" || e.key === "2")) grade(e.key === "2");
@@ -123,20 +152,39 @@ export default function Quiz() {
   }
 
   const c = s.queue[s.idx];
-  if (s.screen === "flash") return (
-    <div className="stage"><Progress />
-      <div className="flash">
-        <div className="eyebrow">{c.eyebrow}</div><h2>{c.title}</h2><div className="sub">{c.subtitle}</div>
-        {s.answered ? <StepsList steps={c.steps} /> : <button className="btn primary big" onClick={() => up({ answered: true })}>Reveal steps</button>}
-      </div>
-      {s.answered && (
-        <div className="grade">
-          <button className="btn bad" onClick={() => grade(false)}>Missed it</button>
-          <button className="btn good" onClick={() => grade(true)}>Knew it</button>
+  if (s.screen === "flash") {
+    if (editing) return (
+      <div className="stage"><Progress />
+        <div className="cardp" style={{ textAlign: "left" }}>
+          <CardBody card={editing} onChange={(fn) => setEditing((cur) => fn(cur))} />
         </div>
-      )}
-    </div>
-  );
+        {editMsg && <div className="note no">{editMsg}</div>}
+        <div className="grade">
+          <button className="btn ghost" disabled={saving} onClick={() => { setEditing(null); setEditMsg(""); }}>Cancel</button>
+          <button className="btn good" disabled={saving} onClick={saveEdit}>{saving ? "Saving…" : "Save card"}</button>
+        </div>
+      </div>
+    );
+    return (
+      <div className="stage"><Progress />
+        <div className="flash">
+          <div className="eyebrow">{c.eyebrow}</div><h2>{c.title}</h2><div className="sub">{c.subtitle}</div>
+          {s.answered ? <StepsList steps={c.steps} /> : <button className="btn primary big" onClick={() => up({ answered: true })}>Reveal steps</button>}
+        </div>
+        {s.answered && (
+          <div className="grade">
+            <button className="btn bad" onClick={() => grade(false)}>Missed it</button>
+            <button className="btn good" onClick={() => grade(true)}>Knew it</button>
+          </div>
+        )}
+        {s.answered && canEdit && (
+          <div className="addrow" style={{ marginTop: 10, justifyContent: "center" }}>
+            <button className="btn sm" onClick={() => setEditing(JSON.parse(JSON.stringify(c)))}>✎ Edit this card</button>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   if (s.screen === "mc") return (
     <div className="stage"><Progress />
